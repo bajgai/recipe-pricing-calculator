@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recipe Pricing Calculator for Bakers, Cafes & Caterers</title>
+  <meta name="description" content="Free recipe costing and menu pricing calculator for bakers, cafes, caterers, and food trucks. Calculate ingredient cost, labor, packaging, fees, profit margin, and suggested selling price." />
+  <style>
+    :root {
+      --bg: #fff9f0;
+      --card: #ffffff;
+      --ink: #241c15;
+      --muted: #6f6257;
+      --line: #eadfce;
+      --accent: #d97706;
+      --accent-dark: #92400e;
+      --good: #15803d;
+      --bad: #b91c1c;
+      --soft: #fff3d6;
+      --shadow: 0 20px 60px rgba(82, 48, 10, 0.12);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(circle at top left, #fff4d7, var(--bg) 42%, #fff 100%); color: var(--ink); }
+    header { padding: 48px 20px 24px; text-align: center; }
+    .eyebrow { color: var(--accent-dark); font-weight: 800; text-transform: uppercase; letter-spacing: .12em; font-size: 12px; }
+    h1 { margin: 12px auto; max-width: 980px; font-size: clamp(34px, 6vw, 68px); line-height: .96; letter-spacing: -0.055em; }
+    .sub { max-width: 760px; margin: 0 auto; color: var(--muted); font-size: 19px; line-height: 1.55; }
+    main { max-width: 1180px; margin: 0 auto; padding: 20px; }
+    .grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr); gap: 22px; align-items: start; }
+    .card { background: rgba(255,255,255,.88); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); padding: 22px; backdrop-filter: blur(12px); }
+    .card h2 { margin: 0 0 14px; font-size: 22px; letter-spacing: -0.02em; }
+    .section { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+    label { display: block; font-size: 13px; font-weight: 750; color: var(--muted); margin-bottom: 6px; }
+    input, select { width: 100%; padding: 12px 13px; border: 1px solid var(--line); border-radius: 14px; background: #fff; font-size: 15px; color: var(--ink); outline: none; }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(217,119,6,.12); }
+    .row { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+    .row.three { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .row.two { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .ingredient { display: grid; grid-template-columns: 1.3fr .7fr .7fr 44px; gap: 10px; margin-bottom: 10px; align-items: end; }
+    button { border: 0; border-radius: 14px; padding: 12px 15px; font-weight: 800; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease; }
+    button:hover { transform: translateY(-1px); }
+    .primary { background: var(--accent); color: #fff; box-shadow: 0 10px 24px rgba(217,119,6,.22); }
+    .secondary { background: var(--soft); color: var(--accent-dark); border: 1px solid #f6d58e; }
+    .danger { background: #fee2e2; color: var(--bad); }
+    .ghost { background: #f8f2e8; color: var(--ink); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .result { position: sticky; top: 18px; }
+    .price { background: linear-gradient(135deg, #fffbeb, #fff); border: 1px solid #f4d58a; border-radius: 22px; padding: 20px; margin-bottom: 14px; }
+    .price small { color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .price strong { display: block; font-size: 48px; line-height: 1; letter-spacing: -0.05em; margin-top: 8px; }
+    .metrics { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+    .metric { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
+    .metric span { display: block; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .metric b { display: block; margin-top: 5px; font-size: 22px; letter-spacing: -0.02em; }
+    .hint { color: var(--muted); font-size: 13px; line-height: 1.45; margin: 10px 0 0; }
+    .callout { margin-top: 18px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 18px; padding: 16px; color: #7c2d12; }
+    .callout b { display: block; margin-bottom: 5px; }
+    footer { max-width: 1180px; margin: 18px auto 40px; padding: 0 20px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } .result { position: static; } .row, .row.three, .row.two { grid-template-columns: 1fr; } .ingredient { grid-template-columns: 1fr 1fr; } .ingredient .danger { grid-column: span 2; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">Free pricing calculator</div>
+    <h1>Stop underpricing your recipes.</h1>
+    <p class="sub">Calculate the real selling price for cakes, catering trays, cafe items, meal prep, and food-truck menu items — including ingredients, labor, packaging, overhead, payment fees, and profit margin.</p>
+  </header>
+
+  <main class="grid">
+    <section class="card">
+      <h2>Recipe details</h2>
+      <div class="row three">
+        <div><label for="recipeName">Recipe / item name</label><input id="recipeName" value="Chocolate cupcakes" /></div>
+        <div><label for="yield">Servings / units per batch</label><input id="yield" type="number" min="1" step="1" value="12" /></div>
+        <div><label for="currency">Currency</label><input id="currency" value="$" maxlength="4" /></div>
+      </div>
+
+      <div class="section">
+        <h2>Ingredients</h2>
+        <p class="hint">Enter the cost used in this batch, not the full bag/container cost. Example: if you use $1.40 worth of flour, enter 1.40.</p>
+        <div id="ingredients"></div>
+        <button class="secondary" id="addIngredient" type="button">+ Add ingredient</button>
+      </div>
+
+      <div class="section">
+        <h2>Labor, packaging & costs</h2>
+        <div class="row">
+          <div><label for="laborHours">Labor hours</label><input id="laborHours" type="number" min="0" step="0.25" value="1.5" /></div>
+          <div><label for="laborRate">Hourly labor rate</label><input id="laborRate" type="number" min="0" step="0.01" value="25" /></div>
+          <div><label for="packagingUnit">Packaging per unit</label><input id="packagingUnit" type="number" min="0" step="0.01" value="0.35" /></div>
+          <div><label for="overheadPct">Overhead %</label><input id="overheadPct" type="number" min="0" step="0.1" value="10" /></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Pricing target</h2>
+        <div class="row three">
+          <div><label for="marginPct">Target profit margin %</label><input id="marginPct" type="number" min="1" max="95" step="0.1" value="55" /></div>
+          <div><label for="paymentFeePct">Payment/platform fee %</label><input id="paymentFeePct" type="number" min="0" step="0.1" value="3" /></div>
+          <div><label for="roundTo">Round price to nearest</label><input id="roundTo" type="number" min="0.01" step="0.01" value="0.50" /></div>
+        </div>
+        <div class="actions">
+          <button class="primary" id="calculate" type="button">Calculate price</button>
+          <button class="ghost" id="sample" type="button">Load sample</button>
+          <button class="ghost" id="reset" type="button">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card result">
+      <h2>Your recommended price</h2>
+      <div class="price">
+        <small>Suggested selling price per unit</small>
+        <strong id="suggestedPrice">$0.00</strong>
+        <p class="hint" id="priceNote">Add costs to calculate a profitable selling price.</p>
+      </div>
+      <div class="metrics">
+        <div class="metric"><span>Batch cost</span><b id="batchCost">$0.00</b></div>
+        <div class="metric"><span>Cost / unit</span><b id="unitCost">$0.00</b></div>
+        <div class="metric"><span>Profit / unit</span><b id="profitUnit">$0.00</b></div>
+        <div class="metric"><span>Margin</span><b id="actualMargin">0%</b></div>
+        <div class="metric"><span>Ingredient cost</span><b id="ingredientCost">$0.00</b></div>
+        <div class="metric"><span>Labor cost</span><b id="laborCost">$0.00</b></div>
+      </div>
+      <div class="callout">
+        <b>Paid product idea:</b>
+        Turn this into a downloadable Google Sheet bundle with saved recipes, quote history, ingredient price updates, and printable client quote sheets.
+      </div>
+      <div class="actions">
+        <button class="secondary" id="exportCsv" type="button">Export CSV</button>
+        <button class="secondary" id="copySummary" type="button">Copy summary</button>
+      </div>
+    </aside>
+  </main>
+
+  <main>
+
+    <section class="card" style="margin-top:22px;">
+      <h2>Want the full pricing system?</h2>
+      <p class="sub" style="text-align:left; margin:0; font-size:16px; max-width:none;">The free calculator gives you one price. The paid bundle helps you save ingredient costs, build recipe cards, track quotes, compare menu margins, and print customer-ready quote sheets.</p>
+      <div class="actions">
+        <a class="primary" style="display:inline-block; text-decoration:none; border-radius:14px; padding:12px 15px; font-weight:800;" href="bundle/copy/product-page.md">View bundle offer</a>
+        <a class="secondary" style="display:inline-block; text-decoration:none; border-radius:14px; padding:12px 15px; font-weight:800;" href="bundle/csv/recipe-costing-template.csv">Download sample CSV</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><b>Disclaimer:</b> This calculator is an estimate for business planning. Check your local taxes, platform fees, and food-business requirements before quoting customers.</p>
+  </footer>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const ingredientDefaults = [
+      ['Flour', 1.40, 'batch'], ['Sugar', 1.10, 'batch'], ['Butter', 3.25, 'batch'], ['Chocolate', 4.80, 'batch'], ['Eggs', 2.00, 'batch']
+    ];
+
+    function money(value) {
+      const symbol = $('currency').value || '$';
+      return symbol + (Number.isFinite(value) ? value : 0).toFixed(2);
+    }
+    function num(id) { return parseFloat($(id).value) || 0; }
+    function roundTo(value, nearest) { return nearest > 0 ? Math.ceil(value / nearest) * nearest : value; }
+
+    function ingredientRow(name = '', cost = 0, note = '') {
+      const wrap = document.createElement('div');
+      wrap.className = 'ingredient';
+      wrap.innerHTML = `
+        <div><label>Ingredient</label><input class="ing-name" value="${name}" placeholder="e.g. Flour" /></div>
+        <div><label>Cost used</label><input class="ing-cost" type="number" min="0" step="0.01" value="${cost}" /></div>
+        <div><label>Note</label><input class="ing-note" value="${note}" placeholder="optional" /></div>
+        <button class="danger" type="button">×</button>`;
+      wrap.querySelector('button').addEventListener('click', () => { wrap.remove(); calculate(); save(); });
+      wrap.querySelectorAll('input').forEach(i => i.addEventListener('input', () => { calculate(); save(); }));
+      $('ingredients').appendChild(wrap);
+    }
+
+    function getIngredients() {
+      return [...document.querySelectorAll('.ingredient')].map(row => ({
+        name: row.querySelector('.ing-name').value.trim(),
+        cost: parseFloat(row.querySelector('.ing-cost').value) || 0,
+        note: row.querySelector('.ing-note').value.trim()
+      }));
+    }
+
+    function calculate() {
+      const yieldUnits = Math.max(1, num('yield'));
+      const ingredients = getIngredients();
+      const ingredientTotal = ingredients.reduce((s, i) => s + i.cost, 0);
+      const labor = num('laborHours') * num('laborRate');
+      const packaging = num('packagingUnit') * yieldUnits;
+      const subtotal = ingredientTotal + labor + packaging;
+      const overhead = subtotal * (num('overheadPct') / 100);
+      const batchCost = subtotal + overhead;
+      const costPerUnit = batchCost / yieldUnits;
+      const targetMargin = Math.min(95, Math.max(1, num('marginPct'))) / 100;
+      const paymentFee = num('paymentFeePct') / 100;
+      const rawPrice = costPerUnit / Math.max(0.01, 1 - targetMargin - paymentFee);
+      const suggested = roundTo(rawPrice, num('roundTo'));
+      const feeCost = suggested * paymentFee;
+      const profit = suggested - feeCost - costPerUnit;
+      const actualMargin = suggested > 0 ? (profit / suggested) * 100 : 0;
+
+      $('suggestedPrice').textContent = money(suggested);
+      $('batchCost').textContent = money(batchCost);
+      $('unitCost').textContent = money(costPerUnit);
+      $('profitUnit').textContent = money(profit);
+      $('actualMargin').textContent = actualMargin.toFixed(1) + '%';
+      $('ingredientCost').textContent = money(ingredientTotal);
+      $('laborCost').textContent = money(labor);
+      $('priceNote').textContent = `${$('recipeName').value || 'This item'} costs ${money(costPerUnit)} per unit before selling fees. At ${money(suggested)}, estimated profit is ${money(profit)} per unit.`;
+      return { ingredients, ingredientTotal, labor, packaging, overhead, batchCost, costPerUnit, suggested, profit, actualMargin };
+    }
+
+    function save() {
+      const data = {
+        recipeName: $('recipeName').value, yield: $('yield').value, currency: $('currency').value,
+        laborHours: $('laborHours').value, laborRate: $('laborRate').value, packagingUnit: $('packagingUnit').value,
+        overheadPct: $('overheadPct').value, marginPct: $('marginPct').value, paymentFeePct: $('paymentFeePct').value,
+        roundTo: $('roundTo').value, ingredients: getIngredients()
+      };
+      localStorage.setItem('recipePricingCalculator', JSON.stringify(data));
+    }
+
+    function load(data) {
+      Object.entries(data).forEach(([k,v]) => { if ($(k) && k !== 'ingredients') $(k).value = v; });
+      $('ingredients').innerHTML = '';
+      (data.ingredients || []).forEach(i => ingredientRow(i.name, i.cost, i.note));
+      calculate(); save();
+    }
+
+    function sample() {
+      load({ recipeName: 'Chocolate cupcakes', yield: 12, currency: '$', laborHours: 1.5, laborRate: 25, packagingUnit: 0.35, overheadPct: 10, marginPct: 55, paymentFeePct: 3, roundTo: 0.50, ingredients: ingredientDefaults.map(([name,cost,note]) => ({ name, cost, note })) });
+    }
+
+    function reset() {
+      localStorage.removeItem('recipePricingCalculator');
+      load({ recipeName: '', yield: 12, currency: '$', laborHours: 0, laborRate: 25, packagingUnit: 0, overheadPct: 10, marginPct: 55, paymentFeePct: 3, roundTo: 0.50, ingredients: [{name:'', cost:0, note:''}] });
+    }
+
+    function exportCsv() {
+      const r = calculate();
+      const rows = [['Recipe', $('recipeName').value], ['Suggested price per unit', r.suggested.toFixed(2)], ['Cost per unit', r.costPerUnit.toFixed(2)], ['Profit per unit', r.profit.toFixed(2)], ['Actual margin', r.actualMargin.toFixed(1) + '%'], [], ['Ingredient', 'Cost', 'Note'], ...r.ingredients.map(i => [i.name, i.cost.toFixed(2), i.note])];
+      const csv = rows.map(row => row.map(cell => `"${String(cell ?? '').replaceAll('"','""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${($('recipeName').value || 'recipe').toLowerCase().replace(/[^a-z0-9]+/g,'-')}-pricing.csv`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    async function copySummary() {
+      const r = calculate();
+      const text = `${$('recipeName').value || 'Recipe'} pricing summary\nSuggested price: ${money(r.suggested)} per unit\nCost/unit: ${money(r.costPerUnit)}\nProfit/unit: ${money(r.profit)}\nMargin: ${r.actualMargin.toFixed(1)}%\nBatch cost: ${money(r.batchCost)}`;
+      await navigator.clipboard.writeText(text);
+      $('copySummary').textContent = 'Copied!';
+      setTimeout(() => $('copySummary').textContent = 'Copy summary', 1200);
+    }
+
+    ['recipeName','yield','currency','laborHours','laborRate','packagingUnit','overheadPct','marginPct','paymentFeePct','roundTo'].forEach(id => $(id).addEventListener('input', () => { calculate(); save(); }));
+    $('addIngredient').addEventListener('click', () => { ingredientRow(); calculate(); save(); });
+    $('calculate').addEventListener('click', () => { calculate(); save(); });
+    $('sample').addEventListener('click', sample);
+    $('reset').addEventListener('click', reset);
+    $('exportCsv').addEventListener('click', exportCsv);
+    $('copySummary').addEventListener('click', copySummary);
+
+    const saved = localStorage.getItem('recipePricingCalculator');
+    if (saved) { try { load(JSON.parse(saved)); } catch { sample(); } } else { sample(); }
+  </script>
+</body>
+</html>
