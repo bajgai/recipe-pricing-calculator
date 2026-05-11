@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recipe Pricing Pro Toolkit</title>
+  <meta name="description" content="Recipe Pricing Pro Toolkit for bakers, caterers, cafes and food trucks. Save ingredients, price multiple recipes, generate quotes, and export menu margins." />
+  <style>
+    :root{--bg:#fff9f0;--card:#fff;--ink:#241c15;--muted:#6f6257;--line:#eadfce;--accent:#d97706;--dark:#92400e;--green:#15803d;--red:#b91c1c;--soft:#fff3d6;--shadow:0 20px 60px rgba(82,48,10,.12);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#fff4d7,var(--bg) 42%,#fff 100%);color:var(--ink)}header{padding:42px 20px 20px;text-align:center}.eyebrow{color:var(--dark);font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:12px}h1{margin:10px auto;max-width:900px;font-size:clamp(34px,5vw,58px);line-height:.98;letter-spacing:-.05em}.sub{max-width:780px;margin:0 auto;color:var(--muted);font-size:18px;line-height:1.55}main{max-width:1240px;margin:0 auto;padding:20px}.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}.card{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:20px;backdrop-filter:blur(12px)}h2{margin:0 0 14px;font-size:22px;letter-spacing:-.02em}.section{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}label{display:block;font-size:12px;font-weight:850;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}input,textarea,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:14px;color:var(--ink);outline:none}textarea{min-height:84px;resize:vertical}input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(217,119,6,.12)}.row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.row.two{grid-template-columns:repeat(2,1fr)}.row.three{grid-template-columns:repeat(3,1fr)}button,.btn{border:0;border-radius:14px;padding:11px 14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.15s}.primary{background:var(--accent);color:#fff;box-shadow:0 10px 24px rgba(217,119,6,.22)}.secondary{background:var(--soft);color:var(--dark);border:1px solid #f6d58e}.ghost{background:#f8f2e8;color:var(--ink)}.danger{background:#fee2e2;color:var(--red)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.item{display:grid;grid-template-columns:1.2fr .6fr .6fr .6fr 42px;gap:8px;align-items:end;margin-bottom:8px}.ingredient{display:grid;grid-template-columns:1.2fr .55fr .55fr .55fr 42px;gap:8px;align-items:end;margin-bottom:8px}.metricgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px}.metric span{display:block;color:var(--muted);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.metric b{display:block;margin-top:5px;font-size:22px;letter-spacing:-.02em}.recipe-list{display:grid;gap:10px}.recipe-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.recipe-card strong{display:block}.recipe-card small{color:var(--muted)}.quote{white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;color:#3b3028;line-height:1.45}.pill{display:inline-block;border-radius:999px;background:#ecfdf5;color:#166534;padding:4px 9px;font-size:12px;font-weight:900}.hint{color:var(--muted);font-size:13px;line-height:1.45}.notice{background:#fff7ed;border:1px solid #fed7aa;border-radius:18px;padding:14px;color:#7c2d12;margin-top:12px}@media(max-width:980px){.grid{grid-template-columns:1fr}.row,.row.two,.row.three{grid-template-columns:1fr}.item,.ingredient{grid-template-columns:1fr 1fr}.item button,.ingredient button{grid-column:span 2}.metricgrid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Paid product prototype</div>
+  <h1>Recipe Pricing Pro Toolkit</h1>
+  <p class="sub">A more complete pricing workspace for food businesses: ingredient database, multi-recipe costing, menu margin dashboard, customer quote generator, and CSV exports.</p>
+</header>
+<main class="grid">
+  <section class="card">
+    <h2>1. Ingredient database</h2>
+    <p class="hint">Save common ingredients once, then use them across recipes. Costs are per gram/ml/unit depending on how you track the ingredient.</p>
+    <div id="ingredients"></div>
+    <div class="actions"><button class="secondary" id="addIngredient">+ Add ingredient</button><button class="ghost" id="seed">Load sample data</button></div>
+
+    <div class="section">
+      <h2>2. Price a recipe</h2>
+      <div class="row three">
+        <div><label>Recipe name</label><input id="recipeName" value="Chocolate cupcakes"></div>
+        <div><label>Batch yield</label><input id="yield" type="number" min="1" value="12"></div>
+        <div><label>Currency</label><input id="currency" value="$" maxlength="4"></div>
+      </div>
+      <div class="section" style="margin-top:12px;padding-top:12px">
+        <h2 style="font-size:18px">Recipe ingredients</h2>
+        <div id="recipeItems"></div>
+        <button class="secondary" id="addItem">+ Add recipe item</button>
+      </div>
+      <div class="section">
+        <div class="row">
+          <div><label>Labor hours</label><input id="laborHours" type="number" step="0.25" value="1.5"></div>
+          <div><label>Labor rate</label><input id="laborRate" type="number" step="0.01" value="25"></div>
+          <div><label>Packaging / unit</label><input id="packaging" type="number" step="0.01" value="0.35"></div>
+          <div><label>Overhead %</label><input id="overhead" type="number" step="0.1" value="10"></div>
+        </div>
+        <div class="row three" style="margin-top:10px">
+          <div><label>Target margin %</label><input id="margin" type="number" step="0.1" value="55"></div>
+          <div><label>Payment fee %</label><input id="fee" type="number" step="0.1" value="3"></div>
+          <div><label>Round to</label><input id="round" type="number" step="0.01" value="0.50"></div>
+        </div>
+        <div class="actions"><button class="primary" id="saveRecipe">Save recipe</button><button class="ghost" id="clearRecipe">Clear recipe</button></div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="card">
+    <h2>Pricing result <span class="pill">Pro</span></h2>
+    <div class="metricgrid">
+      <div class="metric"><span>Suggested price</span><b id="suggested">$0.00</b></div>
+      <div class="metric"><span>Cost / unit</span><b id="unitCost">$0.00</b></div>
+      <div class="metric"><span>Profit / unit</span><b id="profit">$0.00</b></div>
+      <div class="metric"><span>Batch cost</span><b id="batchCost">$0.00</b></div>
+      <div class="metric"><span>Margin</span><b id="actualMargin">0%</b></div>
+      <div class="metric"><span>Revenue / batch</span><b id="batchRevenue">$0.00</b></div>
+    </div>
+    <div class="actions"><button class="secondary" id="exportRecipes">Export recipes CSV</button><button class="secondary" id="exportIngredients">Export ingredients CSV</button></div>
+
+    <div class="section">
+      <h2>Saved menu items</h2>
+      <div id="recipeList" class="recipe-list"></div>
+    </div>
+
+    <div class="section">
+      <h2>Customer quote generator</h2>
+      <div class="row two">
+        <div><label>Customer</label><input id="customer" placeholder="Customer name"></div>
+        <div><label>Quantity</label><input id="quoteQty" type="number" min="1" value="24"></div>
+      </div>
+      <div style="margin-top:10px"><label>Terms / notes</label><textarea id="terms">Quote valid for 7 days. 50% deposit required to reserve the date.</textarea></div>
+      <div class="actions"><button class="primary" id="makeQuote">Generate quote</button><button class="ghost" id="copyQuote">Copy quote</button></div>
+      <div id="quote" class="quote">Save or calculate a recipe, then generate a customer quote.</div>
+    </div>
+    <div class="notice"><b>How to sell this:</b> Package this page privately with the Google Sheets bundle. Buyers get the spreadsheet + this local Pro calculator as a bonus.</div>
+  </aside>
+</main>
+<script>
+const $=id=>document.getElementById(id); const state={ingredients:[],recipes:[],active:null};
+const money=n=>($('currency').value||'$')+(Number.isFinite(n)?n:0).toFixed(2); const n=id=>parseFloat($(id).value)||0; const rid=()=>Math.random().toString(36).slice(2,9);
+function save(){localStorage.setItem('recipeProToolkit',JSON.stringify(state));}
+function load(){try{Object.assign(state,JSON.parse(localStorage.getItem('recipeProToolkit')||'{}'));}catch{} if(!state.ingredients?.length) seed(false); renderAll();}
+function seed(announce=true){state.ingredients=[{id:rid(),name:'Flour',unit:'g',cost:0.0019},{id:rid(),name:'Sugar',unit:'g',cost:0.0016},{id:rid(),name:'Butter',unit:'g',cost:0.0121},{id:rid(),name:'Eggs',unit:'unit',cost:0.416},{id:rid(),name:'Chocolate chips',unit:'g',cost:0.0125},{id:rid(),name:'Cupcake liner + box',unit:'unit',cost:0.35}]; if(announce) save(); renderAll();}
+function ingredientRow(i){return `<div class="ingredient" data-id="${i.id}"><div><label>Name</label><input class="ing-name" value="${i.name}"></div><div><label>Unit</label><input class="ing-unit" value="${i.unit}"></div><div><label>Cost / unit</label><input class="ing-cost" type="number" step="0.0001" value="${i.cost}"></div><div><label>Example</label><input value="${money(i.cost)}/${i.unit}" disabled></div><button class="danger ing-del">×</button></div>`}
+function itemRow(item={ingredientId:state.ingredients[0]?.id||'',qty:0}){const opts=state.ingredients.map(i=>`<option value="${i.id}" ${i.id===item.ingredientId?'selected':''}>${i.name}</option>`).join('');return `<div class="item"><div><label>Ingredient</label><select class="item-ing">${opts}</select></div><div><label>Quantity</label><input class="item-qty" type="number" step="0.01" value="${item.qty}"></div><div><label>Unit</label><input class="item-unit" value="${state.ingredients.find(i=>i.id===item.ingredientId)?.unit||''}" disabled></div><div><label>Cost</label><input class="item-cost" disabled></div><button class="danger item-del">×</button></div>`}
+function getItems(){return [...document.querySelectorAll('.item')].map(row=>({ingredientId:row.querySelector('.item-ing').value,qty:parseFloat(row.querySelector('.item-qty').value)||0}));}
+function calc(){const items=getItems(); let ingredientCost=0; items.forEach(item=>{const ing=state.ingredients.find(i=>i.id===item.ingredientId); if(ing) ingredientCost+=ing.cost*item.qty;}); const yieldUnits=Math.max(1,n('yield')); const labor=n('laborHours')*n('laborRate'); const packaging=n('packaging')*yieldUnits; const subtotal=ingredientCost+labor+packaging; const overhead=subtotal*n('overhead')/100; const batchCost=subtotal+overhead; const unitCost=batchCost/yieldUnits; const margin=Math.min(.95,Math.max(.01,n('margin')/100)); const fee=n('fee')/100; const raw=unitCost/Math.max(.01,1-margin-fee); const round=n('round'); const suggested=round>0?Math.ceil(raw/round)*round:raw; const profit=suggested-(suggested*fee)-unitCost; const actual=suggested?profit/suggested*100:0; const rev=suggested*yieldUnits; $('suggested').textContent=money(suggested); $('unitCost').textContent=money(unitCost); $('profit').textContent=money(profit); $('batchCost').textContent=money(batchCost); $('actualMargin').textContent=actual.toFixed(1)+'%'; $('batchRevenue').textContent=money(rev); document.querySelectorAll('.item').forEach(row=>{const ing=state.ingredients.find(i=>i.id===row.querySelector('.item-ing').value); const qty=parseFloat(row.querySelector('.item-qty').value)||0; row.querySelector('.item-unit').value=ing?.unit||''; row.querySelector('.item-cost').value=money((ing?.cost||0)*qty);}); return {items,ingredientCost,labor,packaging,overhead,batchCost,unitCost,suggested,profit,actual,rev};}
+function renderIngredients(){ $('ingredients').innerHTML=state.ingredients.map(ingredientRow).join(''); document.querySelectorAll('.ingredient').forEach(row=>{const id=row.dataset.id; row.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{const ing=state.ingredients.find(i=>i.id===id); ing.name=row.querySelector('.ing-name').value; ing.unit=row.querySelector('.ing-unit').value; ing.cost=parseFloat(row.querySelector('.ing-cost').value)||0; save(); renderRecipeItems(); calc();}); row.querySelector('.ing-del').onclick=()=>{state.ingredients=state.ingredients.filter(i=>i.id!==id); save(); renderAll();};});}
+function renderRecipeItems(items=getItems().length?getItems():[{ingredientId:state.ingredients[0]?.id,qty:300},{ingredientId:state.ingredients[1]?.id,qty:250},{ingredientId:state.ingredients[2]?.id,qty:225}]){ $('recipeItems').innerHTML=items.map(itemRow).join(''); document.querySelectorAll('.item').forEach(row=>{row.querySelectorAll('select,input').forEach(el=>el.oninput=()=>{calc();}); row.querySelector('.item-del').onclick=()=>{row.remove(); calc();};}); calc();}
+function renderRecipes(){ if(!state.recipes.length){$('recipeList').innerHTML='<p class="hint">No saved recipes yet.</p>';return;} $('recipeList').innerHTML=state.recipes.map((r,idx)=>`<div class="recipe-card"><div><strong>${r.name}</strong><small>${money(r.suggested)} each · ${r.yield} units · ${r.actual.toFixed(1)}% margin</small></div><div class="actions" style="margin:0"><button class="ghost load-rec" data-i="${idx}">Load</button><button class="danger del-rec" data-i="${idx}">×</button></div></div>`).join(''); document.querySelectorAll('.load-rec').forEach(b=>b.onclick=()=>loadRecipe(+b.dataset.i)); document.querySelectorAll('.del-rec').forEach(b=>b.onclick=()=>{state.recipes.splice(+b.dataset.i,1);save();renderRecipes();});}
+function renderAll(){renderIngredients(); renderRecipeItems(); renderRecipes(); calc();}
+function saveRecipe(){const c=calc(); const rec={name:$('recipeName').value||'Untitled recipe',yield:n('yield'),currency:$('currency').value,inputs:{laborHours:n('laborHours'),laborRate:n('laborRate'),packaging:n('packaging'),overhead:n('overhead'),margin:n('margin'),fee:n('fee'),round:n('round')},items:c.items,suggested:c.suggested,unitCost:c.unitCost,profit:c.profit,actual:c.actual,batchCost:c.batchCost}; const existing=state.recipes.findIndex(r=>r.name===rec.name); if(existing>=0) state.recipes[existing]=rec; else state.recipes.push(rec); state.active=rec; save(); renderRecipes();}
+function loadRecipe(i){const r=state.recipes[i]; if(!r)return; $('recipeName').value=r.name; $('yield').value=r.yield; $('currency').value=r.currency||'$'; Object.entries(r.inputs||{}).forEach(([k,v])=>{if($(k))$(k).value=v}); renderRecipeItems(r.items); state.active=r; calc();}
+function csv(rows){return rows.map(r=>r.map(c=>`"${String(c??'').replaceAll('"','""')}"`).join(',')).join('\n')}
+function download(name,content){const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([content],{type:'text/csv'})); a.download=name; a.click(); URL.revokeObjectURL(a.href)}
+function exportIngredients(){download('ingredient-database.csv',csv([['Ingredient','Unit','Cost Per Unit'],...state.ingredients.map(i=>[i.name,i.unit,i.cost])]))}
+function exportRecipes(){download('recipe-pricing.csv',csv([['Recipe','Yield','Suggested Price','Cost/Unit','Profit/Unit','Margin','Batch Cost'],...state.recipes.map(r=>[r.name,r.yield,r.suggested,r.unitCost,r.profit,r.actual+'%',r.batchCost])]))}
+function makeQuote(){const c=calc(); const qty=Math.max(1,n('quoteQty')); const total=c.suggested*qty; const txt=`Quote for ${$('customer').value||'Customer'}\n\nItem: ${$('recipeName').value||'Recipe'}\nQuantity: ${qty}\nUnit price: ${money(c.suggested)}\nTotal: ${money(total)}\n\n${$('terms').value}`; $('quote').textContent=txt; return txt;}
+$('addIngredient').onclick=()=>{state.ingredients.push({id:rid(),name:'New ingredient',unit:'g',cost:0});save();renderAll();}; $('seed').onclick=()=>seed(true); $('addItem').onclick=()=>{$('recipeItems').insertAdjacentHTML('beforeend',itemRow({ingredientId:state.ingredients[0]?.id,qty:0})); renderRecipeItems(getItems());}; $('saveRecipe').onclick=saveRecipe; $('clearRecipe').onclick=()=>{['recipeName'].forEach(id=>$(id).value=''); renderRecipeItems([{ingredientId:state.ingredients[0]?.id,qty:0}]); calc();}; $('exportIngredients').onclick=exportIngredients; $('exportRecipes').onclick=exportRecipes; $('makeQuote').onclick=makeQuote; $('copyQuote').onclick=async()=>{await navigator.clipboard.writeText(makeQuote()); $('copyQuote').textContent='Copied!'; setTimeout(()=>$('copyQuote').textContent='Copy quote',1200)}; ['recipeName','yield','currency','laborHours','laborRate','packaging','overhead','margin','fee','round'].forEach(id=>$(id).oninput=calc); load();
+</script>
+</body>
+</html>
